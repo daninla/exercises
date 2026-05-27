@@ -1,22 +1,44 @@
 "use strict";
 
-const symbols = " ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+function generateYearBehavior(year) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const behaviorObject = {};
 
-function quickSum(str) {
-  const reqExp = /^[A-Z][A-Z ]*[A-Z]$/;
+  months.forEach((month, index) => {
+    behaviorObject[month] = {};
+    const daysInMonth = new Date(year, index + 1, 0).getDate();
 
-  if (!str) return 0;
-  if (!reqExp.test(str)) return 0;
-  if (str.length == 1) return symbols.indexOf(str[0]);
-
-  return str.split("").reduce((acc, element, index) => {
-    return acc + (index + 1) * symbols.indexOf(element);
-  }, 0);
+    for (let i = 1; i <= daysInMonth; i++) {
+      behaviorObject[month][i] = Math.random() < 0.5 ? "Nice" : "Naughty";
+    }
+  });
+  return behaviorObject;
 }
 
-console.log(quickSum("AGDR RFDHG"));
-console.log(quickSum("Aа"));
-console.log(quickSum("   "));
-console.log(quickSum("//"));
-console.log(quickSum("AB C"));
-console.log(quickSum(" ABC"));
+function helpSanta(yearBehavior) {
+  let result = 0;
+  for (const month in yearBehavior) {
+    for (const day in yearBehavior[month]) {
+      result += yearBehavior[month][day] === "Nice" ? 1 : -1;
+    }
+  }
+  return result >= 0;
+}
+
+console.log(helpSanta(generateYearBehavior(1997)));
+console.log(helpSanta(generateYearBehavior(2012)));
+console.log(helpSanta(generateYearBehavior(2024)));
+console.log(helpSanta(generateYearBehavior(2026)));
