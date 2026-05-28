@@ -19,6 +19,7 @@ function generateYearBehavior(year) {
 
   months.forEach((month, index) => {
     behaviorObject[month] = {};
+
     const daysInMonth = new Date(year, index + 1, 0).getDate();
 
     for (let i = 1; i <= daysInMonth; i++) {
@@ -29,13 +30,10 @@ function generateYearBehavior(year) {
 }
 
 function helpSanta(yearBehavior) {
-  let result = 0;
-  for (const month in yearBehavior) {
-    for (const day in yearBehavior[month]) {
-      result += yearBehavior[month][day] === "Nice" ? 1 : -1;
-    }
-  }
-  return result >= 0;
+  const behaviorString = JSON.stringify(yearBehavior);
+  const niceCount = (behaviorString.match(/Nice/g) || []).length;
+  const naughtyCount = (behaviorString.match(/Naughty/g) || []).length;
+  return naughtyCount <= niceCount;
 }
 
 console.log(helpSanta(generateYearBehavior(1997)));
